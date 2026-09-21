@@ -185,11 +185,6 @@ function secureDeleteTrip(){
   $("confirmTripDelete").onclick=()=>{if($("confirmTrip").value.trim()!==t.name)return toast("Trip name does not match");state.trips=state.trips.filter(x=>x.id!==t.id);selectedTripId=null;selectedDay=null;save();closeModal();renderAll();toast("Trip deleted")};
 }
 
-function googleLogin(){
-  modal("Google profile",`<div class="form-grid"><p>TripSplit is prepared for Google/Gmail sign-in. A real Google account connection needs a Google OAuth client ID plus a persistent backend/database; those credentials are intentionally not hard-coded into this Vercel package.</p><div class="notice">For this offline/static build, enter the Gmail address you want to use as the local profile identity. When real Google OAuth is connected, this field can be replaced by the Google account returned by the provider.</div><div class="field"><label>Gmail address</label><input id="gmail" type="email" placeholder="you@gmail.com"></div><div class="field"><label>Your display name</label><input id="gmailName" placeholder="Your name"></div></div>`,`<div class="modal-actions"><button class="secondary-btn" onclick="closeModal()">Cancel</button><button class="primary-btn" id="saveGoogle">Continue</button></div>`);
-  $("saveGoogle").onclick=()=>{const email=$("gmail").value.trim(),name=$("gmailName").value.trim()||email.split("@")[0];if(!/^[^@]+@gmail\\.com$/i.test(email))return toast("Enter a valid Gmail address");state.profile={email,name};save();closeModal();toast("Profile identity saved");renderSelected()};
-}
-
 
 function renderQuickHistory(){
   const box=$("quickSplitHistory"); if(!box)return;
@@ -345,5 +340,5 @@ function renderAll(){renderCalendar();renderTrips();renderSelected();renderQuick
 $("prevMonth").onclick=()=>{cursor.setMonth(cursor.getMonth()-1);save();renderCalendar()};
 $("nextMonth").onclick=()=>{cursor.setMonth(cursor.getMonth()+1);save();renderCalendar()};
 $("newTripBtn").onclick=()=>openNewTrip(keyOf(new Date()),keyOf(new Date()));
-$("manageTripBtn").onclick=openSettings;$("addExpenseBtn").onclick=addExpense;$("deleteTripBtn").onclick=secureDeleteTrip;$("googleProfile").onclick=googleLogin;$("quickSplitBtn").onclick=openQuickSplit;
+$("manageTripBtn").onclick=openSettings;$("addExpenseBtn").onclick=addExpense;$("deleteTripBtn").onclick=secureDeleteTrip;$("quickSplitBtn").onclick=openQuickSplit;
 renderAll();
