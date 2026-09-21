@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>TripSplit — Trip Expense Manager</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="topbar">
+    <div>
+      <div class="brand">TripSplit</div>
+      <div class="tagline">Plan trips. Split expenses. Keep everyone accountable.</div>
+    </div>
+    <button id="googleProfile" class="google-btn">Continue with Google</button>
+  </header>
+
+  <main class="page">
+    <section class="calendar-card card">
+      <div class="calendar-head">
+        <button class="icon-btn" id="prevMonth" aria-label="Previous month">‹</button>
+        <div>
+          <h1 id="monthTitle">May 2026</h1>
+          <p>Drag across dates to create a trip.</p>
+        </div>
+        <button class="icon-btn" id="nextMonth" aria-label="Next month">›</button>
+      </div>
+
+      <div class="calendar" id="calendar">
+        <div class="weekday">SUN</div><div class="weekday">MON</div><div class="weekday">TUE</div>
+        <div class="weekday">WED</div><div class="weekday">THU</div><div class="weekday">FRI</div><div class="weekday">SAT</div>
+      </div>
+
+      <div class="calendar-help">
+        <span>🖱️ Drag from the first day to the last day</span>
+        <span>•</span>
+        <span>Tap and drag on mobile</span>
+      </div>
+    </section>
+
+    <section class="quick-split card">
+      <div class="section-head">
+        <div>
+          <h2>Quick Split</h2>
+          <p>For a one-time breakfast, coffee, dinner, cab, or any small bill outside a trip.</p>
+        </div>
+        <button id="quickSplitBtn" class="primary-btn">＋ Split a bill</button>
+      </div>
+      <div class="quick-split-hint">
+        <span>⚡ No trip required</span>
+        <span>•</span>
+        <span>Add 1–2 items</span>
+        <span>•</span>
+        <span>Choose members and percentage shares</span>
+      </div>
+      <div id="quickSplitHistory" class="quick-history"></div>
+    </section>
+
+    <section class="trips-card card">
+      <div class="section-head">
+        <div>
+          <h2>Your trips</h2>
+          <p>All trips saved on this device.</p>
+        </div>
+        <button id="newTripBtn" class="primary-btn">＋ New trip</button>
+      </div>
+      <div id="tripList" class="trip-list"></div>
+      <div id="emptyTrips" class="empty">No trips yet. Drag across the calendar to create your first trip.</div>
+    </section>
+
+    <section id="tripPanel" class="trip-panel card hidden">
+      <div class="trip-panel-head">
+        <div>
+          <div class="eyebrow" id="adminBadge">TRIP</div>
+          <h2 id="tripTitle">Trip</h2>
+          <p id="tripDates"></p>
+        </div>
+        <div class="head-actions">
+          <button id="manageTripBtn" class="secondary-btn">Trip settings</button>
+          <button id="deleteTripBtn" class="danger-outline">Delete trip</button>
+        </div>
+      </div>
+
+      <div class="trip-grid">
+        <aside class="days-column">
+          <h3>Trip days</h3>
+          <div id="tripDays"></div>
+        </aside>
+
+        <section class="expenses-column">
+          <div class="section-head compact">
+            <div>
+              <h3 id="dayTitle">Expenses</h3>
+              <p id="daySub"></p>
+            </div>
+            <button id="addExpenseBtn" class="primary-btn">＋ Add expense</button>
+          </div>
+          <div id="expenseList"></div>
+          <div id="expenseEmpty" class="empty">No expenses on this day.</div>
+        </section>
+
+        <aside class="summary-column">
+          <h3>Pending totals</h3>
+          <p class="muted">Across the whole trip</p>
+          <div id="pendingTotals"></div>
+        </aside>
+      </div>
+    </section>
+  </main>
+
+  <div id="modalRoot"></div>
+  <div id="toast" class="toast"></div>
+  <script src="script.js"></script>
+  <script type="module" src="firebase-auth.js"></script>
+</body>
+</html>
