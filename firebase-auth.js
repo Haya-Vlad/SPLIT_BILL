@@ -1,5 +1,5 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
-import { getAuth, GoogleAuthProvider, signInWithRedirect, getRedirectResult, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js";
+import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js";
 import { getFirestore, doc, getDoc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
 
 const firebaseConfig = {
@@ -79,21 +79,21 @@ async function googleLogin(){
       toast("Signed out of Google");
       return;
     }
-    await signInWithRedirect(auth,provider);
+    const result = await signInWithPopup(auth,provider);
+    if(result?.user){
+      toast("Google account connected");
+    }
   }catch(err){
-    console.error("Google sign-in redirect failed:",err);
-    if(err.code === "auth/unauthorized-domain") toast("Add this website domain to Firebase Authorized domains");
-    else toast("Google sign-in failed. Check Firebase Authentication → Google.");
+    console.error("Google sign-in failed:",err);
+    if(err.code === "auth/popup-blocked") toast("Chrome blocked the Google sign-in popup. Allow pop-ups for TripSplit.");
+    else if(err.code === "auth/popup-closed-by-user") toast("Google sign-in was cancelled.");
+    else if(err.code === "auth/unauthorized-domain") toast("Add this website domain to Firebase Authorized domains");
+    else if(err.code === "auth/operation-not-allowed") toast("Enable Google sign-in in Firebase Authentication.");
+    else toast("Google sign-in failed: " + (err.code || "unknown error"));
   }
 }
 
 if(btn) btn.onclick=googleLogin;
-
-getRedirectResult(auth).catch(err=>{
-  console.error("Google redirect result failed:",err);
-  if(err.code === "auth/unauthorized-domain") toast("Add this website domain to Firebase Authorized domains");
-  else if(err.code) toast("Google sign-in failed: " + err.code);
-});
 
 onAuthStateChanged(auth, async user=>{
   setButton(user);
