@@ -1,10 +1,10 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
-import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js";
+import { getAuth, GoogleAuthProvider, signInWithRedirect, getRedirectResult, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js";
 import { getFirestore, doc, getDoc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyAt65I4tNrymh6bnq63OomY2ZBn1xFb6PA",
-  authDomain: "split-e1675.firebaseapp.com",
+  authDomain: "split-bill-weld-three.vercel.app",
   projectId: "split-e1675",
   storageBucket: "split-e1675.firebasestorage.app",
   messagingSenderId: "444372080217",
@@ -79,16 +79,11 @@ async function googleLogin(){
       toast("Signed out of Google");
       return;
     }
-    const result = await signInWithPopup(auth,provider);
-    if(result?.user){
-      toast("Google account connected");
-    }
+    await signInWithRedirect(auth,provider);
   }catch(err){
-    console.error("Google sign-in failed:",err);
-    if(err.code === "auth/popup-blocked") toast("Chrome blocked the Google sign-in popup. Allow pop-ups for TripSplit.");
-    else if(err.code === "auth/popup-closed-by-user") toast("Google sign-in was cancelled.");
-    else if(err.code === "auth/unauthorized-domain") toast("Add this website domain to Firebase Authorized domains");
-    else if(err.code === "auth/operation-not-allowed") toast("Enable Google sign-in in Firebase Authentication.");
+    console.error("Google redirect sign-in failed:",err);
+    if(err.code === "auth/unauthorized-domain") toast("Add the Vercel domain to Firebase Authorized domains");
+    else if(err.code === "auth/operation-not-allowed") toast("Enable Google sign-in in Firebase Authentication");
     else toast("Google sign-in failed: " + (err.code || "unknown error"));
   }
 }
