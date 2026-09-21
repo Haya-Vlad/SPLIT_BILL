@@ -1,5 +1,5 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
-import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js";
+import { getAuth, GoogleAuthProvider, signInWithRedirect, getRedirectResult, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js";
 import { getFirestore, doc, getDoc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
 
 const firebaseConfig = {
@@ -79,16 +79,15 @@ async function googleLogin(){
       toast("Signed out of Google");
       return;
     }
-    await signInWithPopup(auth,provider);
+    await signInWithRedirect(auth,provider);
   }catch(err){
-    console.error(err);
-    if(err.code === "auth/popup-blocked") toast("Allow pop-ups for TripSplit and try again");
-    else if(err.code === "auth/unauthorized-domain") toast("Add this website domain to Firebase Authorized domains");
+    console.error("Google sign-in redirect failed:",err);
+    if(err.code === "auth/unauthorized-domain") toast("Add this website domain to Firebase Authorized domains");
     else toast("Google sign-in failed. Check Firebase Authentication → Google.");
   }
 }
 
-if(btn) btn.onclick=googleLogin;
+if(btn) btn.onclick=googleLogin;\n\ngetRedirectResult(auth).catch(err=>{\n  console.error("Google redirect result failed:",err);\n  if(err.code === "auth/unauthorized-domain") toast("Add this website domain to Firebase Authorized domains");\n  else if(err.code) toast("Google sign-in failed: " + err.code);\n});
 
 onAuthStateChanged(auth, async user=>{
   setButton(user);
