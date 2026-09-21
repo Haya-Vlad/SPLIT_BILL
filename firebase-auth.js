@@ -1,5 +1,5 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
-import { getAuth, GoogleAuthProvider, signInWithRedirect, getRedirectResult, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js";
+import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js";
 import { getFirestore, doc, getDoc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
 
 const firebaseConfig = {
@@ -79,9 +79,9 @@ async function googleLogin(){
       toast("Signed out of Google");
       return;
     }
-    await signInWithRedirect(auth,provider);
+    const result = await signInWithPopup(auth,provider);\n    if(result?.user){\n      toast(`Signed in as ${result.user.displayName || result.user.email || "Google account"}`);\n    }
   }catch(err){
-    console.error("Google redirect sign-in failed:",err);
+    console.error("Google popup sign-in failed:",err);
     if(err.code === "auth/unauthorized-domain") toast("Add the Vercel domain to Firebase Authorized domains");
     else if(err.code === "auth/operation-not-allowed") toast("Enable Google sign-in in Firebase Authentication");
     else toast("Google sign-in failed: " + (err.code || "unknown error"));
