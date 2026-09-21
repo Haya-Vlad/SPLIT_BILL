@@ -4,7 +4,7 @@ import { getFirestore, doc, getDoc, setDoc, serverTimestamp } from "https://www.
 
 const firebaseConfig = {
   apiKey: "AIzaSyAt65I4tNrymh6bnq63OomY2ZBn1xFb6PA",
-  authDomain: "split-bill-weld-three.vercel.app",
+  authDomain: "split-e1675.firebaseapp.com",
   projectId: "split-e1675",
   storageBucket: "split-e1675.firebasestorage.app",
   messagingSenderId: "444372080217",
