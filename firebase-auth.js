@@ -90,11 +90,22 @@ async function googleLogin(){
     console.error("Google popup sign-in failed:",err);
     if(err.code === "auth/unauthorized-domain") toast("Add the Vercel domain to Firebase Authorized domains");
     else if(err.code === "auth/operation-not-allowed") toast("Enable Google sign-in in Firebase Authentication");
-    else toast("Google sign-in failed: " + (err.code || "unknown error"));
+    else if(err.code === "auth/popup-blocked") {
+      toast("Popup blocked — switching to redirect sign-in…");
+      await signInWithRedirect(auth,provider,browserPopupRedirectResolver);
+    } else if(err.code === "auth/popup-closed-by-user") {
+      toast("Google sign-in popup was closed.");
+    } else toast("Google sign-in failed: " + (err.code || "unknown error"));
   }
 }
 
 if(btn) btn.onclick=googleLogin;
+
+getRedirectResult(auth,browserPopupRedirectResolver).catch(err=>{
+  console.error("Google redirect result failed:",err);
+  if(err.code === "auth/unauthorized-domain") toast("Add this website domain to Firebase Authorized domains");
+  else if(err.code) toast("Google sign-in failed: " + err.code);
+});
 
 onAuthStateChanged(auth, async user=>{
   setButton(user);
