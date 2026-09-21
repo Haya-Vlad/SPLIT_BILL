@@ -87,7 +87,13 @@ async function googleLogin(){
   }
 }
 
-if(btn) btn.onclick=googleLogin;\n\ngetRedirectResult(auth).catch(err=>{\n  console.error("Google redirect result failed:",err);\n  if(err.code === "auth/unauthorized-domain") toast("Add this website domain to Firebase Authorized domains");\n  else if(err.code) toast("Google sign-in failed: " + err.code);\n});
+if(btn) btn.onclick=googleLogin;
+
+getRedirectResult(auth).catch(err=>{
+  console.error("Google redirect result failed:",err);
+  if(err.code === "auth/unauthorized-domain") toast("Add this website domain to Firebase Authorized domains");
+  else if(err.code) toast("Google sign-in failed: " + err.code);
+});
 
 onAuthStateChanged(auth, async user=>{
   setButton(user);
