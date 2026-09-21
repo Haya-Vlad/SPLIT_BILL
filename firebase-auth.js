@@ -79,7 +79,10 @@ async function googleLogin(){
       toast("Signed out of Google");
       return;
     }
-    const result = await signInWithPopup(auth,provider);\n    if(result?.user){\n      toast(`Signed in as ${result.user.displayName || result.user.email || "Google account"}`);\n    }
+    const result = await signInWithPopup(auth,provider);
+    if(result?.user){
+      toast(`Signed in as ${result.user.displayName || result.user.email || "Google account"}`);
+    }
   }catch(err){
     console.error("Google popup sign-in failed:",err);
     if(err.code === "auth/unauthorized-domain") toast("Add the Vercel domain to Firebase Authorized domains");
